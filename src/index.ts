@@ -1,25 +1,29 @@
 // Local Server 
-import { readFile } from 'fs';
+import fs  from 'fs';
 import * as http from 'http'
 import path from 'path'
 import { fileURLToPath } from 'url';
 
-// const __filename = import.meta.filename;
+const __filename = import.meta.filename;
 const __dirname = import.meta.dirname;
+const userFilePath =path.join(__dirname,"data","users.json") ;
 
 const server = http.createServer((req, res) => {
 
 if(req.url === '/proudcts' && req.method === 'GET'){
 
-     res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
-     readFile(path.join(__dirname,"data","users.json"),"utf-8", ((err,data) =>{
-        if(err){
-            console.error("Error =>",err);
-        }else{
-            console.error("Data =>",JSON.parse(data));
-        }
-        res.write(data)
-        res.end()  //==>  Important for End Server 
+    fs.access(userFilePath,(err =>{
+                   if(err){
+               console.error("Error =>",`File Cannot accesed at this path ${userFilePath}`);
+               return
+           }
+        res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
+        fs.readFile(userFilePath,"utf-8", ((err,data) =>{
+               console.error("Data =>",JSON.parse(data));
+           
+           res.write(data)
+           res.end()  //==>  Important for End Server 
+    }))
     } ))
 }else if (req.url === '/' && req.method === 'GET'){
     res.writeHead(200, { "Content-Type": "text/html" })
