@@ -32,7 +32,15 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         `)
     }else if (req.url === '/add-proudct' && req.method === "POST"){
         res.writeHead(200, {"Content-Type": "text/html" })
-        res.end('add a New Product')
+        let body = ''
+        req.on("data",(chunk)=>{
+            body += chunk.toString()
+        })
+        req.on("end",()=>{
+            const data = new URLSearchParams(body)
+            console.log(data);
+        })
+        res.end('Product Add Succesfuly')
     }
 
 else{
