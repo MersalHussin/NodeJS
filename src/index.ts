@@ -7,14 +7,15 @@ const server = http.createServer((req, res) => {
 if(req.url === '/proudcts' && req.method === 'GET'){
 
      res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
-     readFile("./src/data/users.json", ((err,data) =>{
+     readFile("./src/data/users.json","utf-8", ((err,data) =>{
         if(err){
             console.error("Error =>",err);
         }else{
-            console.error("Data =>",data.toString());
+            console.error("Data =>",JSON.parse(data));
         }
+        res.write(data)
+        res.end()  //==>  Important for End Server 
     } ))
-     res.end("\n")  //==>  Important for End Server 
 }else if (req.url === '/' && req.method === 'GET'){
     res.writeHead(200, { "Content-Type": "text/html" })
     res.write(`<h1>Hello From Server</h1>`)
