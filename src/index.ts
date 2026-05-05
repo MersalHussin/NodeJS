@@ -1,13 +1,18 @@
 // Local Server 
-import { readFile } from 'fs'
+import { readFile } from 'fs';
 import * as http from 'http'
+import path from 'path'
+import { fileURLToPath } from 'url';
+
+// const __filename = import.meta.filename;
+const __dirname = import.meta.dirname;
 
 const server = http.createServer((req, res) => {
 
 if(req.url === '/proudcts' && req.method === 'GET'){
 
      res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
-     readFile("./src/data/users.json","utf-8", ((err,data) =>{
+     readFile(path.join(__dirname,"data","users.json"),"utf-8", ((err,data) =>{
         if(err){
             console.error("Error =>",err);
         }else{
