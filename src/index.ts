@@ -30,6 +30,8 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         <button type="submit">Send</button>
         </form>
         `)
+
+        res.end();
     }else if (req.url === '/add-proudct' && req.method === "POST"){
         res.writeHead(200, {"Content-Type": "text/html" })
         let body = ''
@@ -38,9 +40,16 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         })
         req.on("end",()=>{
             const data = new URLSearchParams(body)
-            console.log(data);
-        })
-        res.end('Product Add Succesfuly')
+            const name = data.get("name") 
+            const age = data.get("age")
+        res.write(`
+        <h1>Product Added</h1>
+        <p>Name: ${name}</p>
+        <p>Age: ${age}</p>
+            `)
+            res.end()
+        }
+    )
     }
 
 else{
