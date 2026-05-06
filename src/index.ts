@@ -85,7 +85,7 @@ else if (req.url === '/assets' && req.method === "GET"){
             }
             res.write("<h1>Assets</h1>")
             res.write("<ul>")
-            res.write(files.map(file => `<li><a href="#">${file}</a> --- <button>Delete</button></li>`).join(''));
+            res.write(files.map(file => `<li><a href=/${file} > ${file}</a> --- <a href=/delete?file=${encodeURIComponent(file)} >Delete</a></li>`).join(''));
             res.write("</ul>")            
             res.end()
         })
@@ -94,6 +94,10 @@ else if (req.url === '/assets' && req.method === "GET"){
 
 
 
+}else if (req.url?.startsWith("/delete") && req.method === "GET"){
+        res.writeHead(200, {"Content-Type": "text/html" })
+            res.write("File Deleted Succsefully")      
+            res.end()
 }
 else{
     res.writeHead(404, { "Content-Type": "text/html" })
