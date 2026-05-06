@@ -95,9 +95,23 @@ else if (req.url === '/assets' && req.method === "GET"){
 
 
 }else if (req.url?.startsWith("/delete") && req.method === "GET"){
+    const file = decodeURIComponent(`${req.url.split("?file=")[1]}`);
+    const assetsPath = path.join(__dirname, "assets" ,file);
+
+    
+    fs.unlink(assetsPath, (err)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+
         res.writeHead(200, {"Content-Type": "text/html" })
-            res.write("File Deleted Succsefully")      
-            res.end()
+        res.write(`<div>`)
+        res.write(`<h1>File  ${file} Deleted Succsefully</h1>`)
+        res.write(`</div>`)
+        res.end()
+    })
+
 }
 else{
     res.writeHead(404, { "Content-Type": "text/html" })
