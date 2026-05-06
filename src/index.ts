@@ -9,7 +9,8 @@ const __dirname = import.meta.dirname;
 
 const server = http.createServer((req, res) => {
     const userFilePath =path.join(__dirname,"data","users.json") ;
-
+    const assetsPath =path.join(__dirname,"assets") ;
+    
 if(req.url === '/proudcts' && req.method === 'GET'){
 
     fs.access(userFilePath,(err =>{
@@ -69,10 +70,34 @@ if(req.url === '/proudcts' && req.method === 'GET'){
             res.end()
     
     })
-}else{
+}
+else if (req.url === '/assets' && req.method === "GET"){
+    fs.access(assetsPath, (err)=>{
+        if(err){
+            console.log(err);
+            return
+        }
+        res.writeHead(200, {"Content-Type": "text/html" })
+        fs.readdir(assetsPath, (err,files)=>{
+            if(err){
+                console.log(err);
+                return
+            }
+            res.write("<h1>Assets</h1>")
+            res.write("<ul>")
+            res.write(files.map(file => `<li><a href="#">${file}</a> --- <button>Delete</button></li>`).join(''));
+            res.write("</ul>")            
+            res.end()
+        })
+    }
+)
+
+
+
+}
+else{
     res.writeHead(404, { "Content-Type": "text/html" })
     res.write(`<h1>404 Page Not Found</h1>`)
-    res.end()
 }
 
 })
