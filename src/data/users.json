@@ -1,8 +1,1 @@
-{
-    "users":
-    [        
-        { "name": "Riad", "age": 23 },
-        { "name": "Adam", "age": 33 },
-        { "name": "Sally", "age": 29 }
-    ]
-}
+{"products":[{"name":"ahmed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12},{"name":"ahmssed","id":12}]}

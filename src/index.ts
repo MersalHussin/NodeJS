@@ -18,13 +18,14 @@ if(req.url === '/proudcts' && req.method === 'GET'){
                return
            }
         res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
+        
         fs.readFile(userFilePath,"utf-8", ((err,data) =>{
-            //    console.error("Data =>",err);
+            const jsonProducts:{products:[{name:string, id:number}]} = JSON.parse(data)
+            const submittedProduct = {name:"ahmssed",id:12}
+            jsonProducts.products.push(submittedProduct)
+            const updatedProducts = JSON.stringify(jsonProducts)
 
-            fs.writeFile(userFilePath, JSON.stringify({
-                name:"omar",
-                age:12,
-            }), (err) =>{
+            fs.writeFile(userFilePath, updatedProducts , (err) =>{
                 console.log(err);
             })
                console.error("Data =>",JSON.parse(data));
