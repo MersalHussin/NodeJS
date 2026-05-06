@@ -6,9 +6,9 @@ import { fileURLToPath } from 'url';
 
 const __filename = import.meta.filename;
 const __dirname = import.meta.dirname;
-const userFilePath =path.join(__dirname,"data","users.json") ;
 
 const server = http.createServer((req, res) => {
+    const userFilePath =path.join(__dirname,"data","users.json") ;
 
 if(req.url === '/proudcts' && req.method === 'GET'){
 
@@ -20,16 +20,6 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
         
         fs.readFile(userFilePath,"utf-8", ((err,data) =>{
-            const jsonProducts:{products:[{name:string, id:number}]} = JSON.parse(data)
-            const submittedProduct = {name:"ahmssed",id:12}
-            jsonProducts.products.push(submittedProduct)
-            const updatedProducts = JSON.stringify(jsonProducts,null ,2)
-
-            fs.writeFile(userFilePath, updatedProducts , (err) =>{
-                console.log(err);
-            })
-               console.error("Data =>",JSON.parse(data));
-           
            res.write(data)
            res.end()  //==>  Important for End Server 
     }))
@@ -43,7 +33,7 @@ if(req.url === '/proudcts' && req.method === 'GET'){
     res.write(`
         <form method="POST" action="/add-proudct">
         <input type="text" name="name" placeholder="Enter Name" />
-        <input type="number" name="age" placeholder="Enter Age" />
+        <input type="text" name="description" placeholder="Enter Description" />
         <button type="submit">Send</button>
         </form>
         `)
@@ -58,18 +48,27 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         req.on("end",()=>{
             const data = new URLSearchParams(body)
             const name = data.get("name") 
-            const age = data.get("age")
+            const description = data.get("description")
+
+            fs.readFile(userFilePath,"utf-8", (err,data) =>{
+            const jsonProducts:{products:[{name:string|null, id:number|null , description:string|null }]} = JSON.parse(data)
+            const submittedProduct = {name:name,id:jsonProducts.products.length+1 , description:description}
+            jsonProducts.products.push(submittedProduct)
+            const updatedProducts = JSON.stringify(jsonProducts,null ,2)
+
+            fs.writeFile(userFilePath, updatedProducts , (err) =>{
+                console.log(err);
+            })
+
         res.write(`
         <h1>Product Added</h1>
         <p>Name: ${name}</p>
-        <p>Age: ${age}</p>
+        <p>Description: ${description}</p>
             `)
             res.end()
-        }
-    )
-    }
-
-else{
+        })
+    })
+}else{
     res.writeHead(404, { "Content-Type": "text/html" })
     res.write(`<h1>404 Page Not Found</h1>`)
     res.end()
