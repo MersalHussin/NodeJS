@@ -1,5 +1,5 @@
 // Local Server 
-import fs  from 'fs';
+import fs , {promises as fsPromise}  from 'fs';
 import * as http from 'http'
 import path from 'path'
 import { fileURLToPath } from 'url';
@@ -45,20 +45,21 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         req.on("data",(chunk)=>{
             body += chunk.toString()
         })
-        req.on("end",()=>{
+        req.on("end",async()=>{
             const data = new URLSearchParams(body)
             const name = data.get("name") 
             const description = data.get("description")
-
-            fs.readFile(userFilePath,"utf-8", (err,data) =>{
-            const jsonProducts:{products:[{name:string|null, id:number|null , description:string|null }]} = JSON.parse(data)
+            try{
+            const jsonData = await fsPromise.readFile(userFilePath, "utf-8")
+            const jsonProducts:{products:[{name:string|null, id:number|null , description:string|null }]} = JSON.parse(jsonData)
             const submittedProduct = {name:name,id:jsonProducts.products.length+1 , description:description}
             jsonProducts.products.push(submittedProduct)
             const updatedProducts = JSON.stringify(jsonProducts,null ,2)
-
-            fs.writeFile(userFilePath, updatedProducts , (err) =>{
+            await fsPromise.writeFile(userFilePath, updatedProducts)
+            }
+            catch(err){
                 console.log(err);
-            })
+            }
 
         res.write(`
         <h1>Product Added</h1>
@@ -66,7 +67,7 @@ if(req.url === '/proudcts' && req.method === 'GET'){
         <p>Description: ${description}</p>
             `)
             res.end()
-        })
+    
     })
 }else{
     res.writeHead(404, { "Content-Type": "text/html" })
