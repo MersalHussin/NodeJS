@@ -19,6 +19,14 @@ if(req.url === '/proudcts' && req.method === 'GET'){
            }
         res.writeHead(200, { "Content-Type": "application/json" }) // == We change contet-type : html / json / ...etc
         fs.readFile(userFilePath,"utf-8", ((err,data) =>{
+            //    console.error("Data =>",err);
+
+            fs.writeFile(userFilePath, JSON.stringify({
+                name:"omar",
+                age:12,
+            }), (err) =>{
+                console.log(err);
+            })
                console.error("Data =>",JSON.parse(data));
            
            res.write(data)
