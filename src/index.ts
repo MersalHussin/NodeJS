@@ -23,7 +23,7 @@ if(req.url === '/proudcts' && req.method === 'GET'){
             const jsonProducts:{products:[{name:string, id:number}]} = JSON.parse(data)
             const submittedProduct = {name:"ahmssed",id:12}
             jsonProducts.products.push(submittedProduct)
-            const updatedProducts = JSON.stringify(jsonProducts)
+            const updatedProducts = JSON.stringify(jsonProducts,null ,2)
 
             fs.writeFile(userFilePath, updatedProducts , (err) =>{
                 console.log(err);
