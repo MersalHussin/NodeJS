@@ -5,7 +5,8 @@ export const generateFakeProducts = () => {
         return{
             id : idx + 1,
             title: faker.commerce.productName(),
-            price: +faker.commerce.price({min:100,max:1000})
+            price: +faker.commerce.price({min:100,max:1000}),
+            desciption: faker.commerce.productDescription()
         }
     })
 
